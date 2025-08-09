@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL Shortener</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    input {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+    <marquee behavior="" direction=""><h1>not working yet</h1></marquee>
+  <h1>🔗 URL Shortener</h1>
+  <input type="text" id="longUrl" placeholder="Enter long URL here..." />
+  <br />
+  <button onclick="shortenUrl()">Shorten Now</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function shortenUrl() {
+      const urlInput = document.getElementById('longUrl');
+      const resultDiv = document.getElementById('result');
+      const longUrl = urlInput.value.trim();
+
+      if (!longUrl) {
+        alert("Please enter a valid URL");
+        return;
+      }
+
+      resultDiv.innerHTML = "Shortening...";
+
+      try {
+        const res = await fetch(`https://api.shrtco.de/v2/shorten?url=${encodeURIComponent(longUrl)}`);
+        const data = await res.json();
+
+        if (data.ok) {
+          resultDiv.innerHTML = `✅ Short URL: <a href="${data.result.full_short_link}" target="_blank">${data.result.full_short_link}</a>`;
+        } else {
+          resultDiv.innerHTML = "❌ Error: Could not shorten the URL.";
+        }
+      } catch (err) {
+        resultDiv.innerHTML = "❌ Something went wrong. Please try again.";
+      }
+    }
+  </script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>

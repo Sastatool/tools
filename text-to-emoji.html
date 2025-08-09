@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Text to Emoji Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ffca28;
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 120px;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #222;
+      color: #fff;
+      border: none;
+      margin-bottom: 10px;
+      resize: none;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #ffca28;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #f4b400;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-size: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 10px;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔤 Text to Emoji Converter</h1>
+
+  <textarea id="textInput" placeholder="Enter text..."></textarea>
+  <br />
+  <button onclick="convertTextToEmoji()">Convert</button>
+
+  <div id="output"></div>
+
+  <script>
+    const emojiMap = {
+      a: "🅰️", b: "🅱️", c: "🌜", d: "🌛", e: "🎗️", f: "🎏", g: "🌀", h: "♓",
+      i: "🎐", j: "🎷", k: "🎋", l: "👢", m: "〽️", n: "🎶", o: "⚽", p: "🅿️",
+      q: "🍳", r: "🌱", s: "💲", t: "🌴", u: "⛎", v: "✅", w: "🔱", x: "❌",
+      y: "🍸", z: "💤", " ": "   "
+    };
+
+    function convertTextToEmoji() {
+      const input = document.getElementById("textInput").value.toLowerCase();
+      let output = "";
+
+      for (let char of input) {
+        output += emojiMap[char] || char;
+      }
+
+      document.getElementById("output").innerText = output;
+    }
+  </script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+
+</body>
+</html>

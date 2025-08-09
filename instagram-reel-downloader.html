@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Reel Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background: #ff0069;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #cc0055;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Instagram Reel Downloader</h2>
+        <input type="text" id="reelUrl" placeholder="Paste Instagram Reel Link">
+        <button onclick="redirectToDownloader()">Download Reel</button>
+    </div>
+
+    <script>
+        function redirectToDownloader() {
+            let url = document.getElementById('reelUrl').value.trim();
+            if (!url) {
+                alert("Please enter a valid Instagram Reel link!");
+                return;
+            }
+            // Redirect to iGram instead of SnapInsta
+            let downloader = "https://igram.world/?url=" + encodeURIComponent(url);
+            window.open(downloader, "_blank");
+        }
+    </script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>

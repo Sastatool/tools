@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDF to JPG Converter - SastaTools</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    .image-container {
+      margin-bottom: 30px;
+    }
+
+    img {
+      max-width: 90%;
+      margin: 10px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 10px 15px;
+      margin-top: 5px;
+      background: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    .download-btn:hover {
+      background: #0056b3;
+    }
+
+    @media (max-width: 480px) {
+      h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <h2>📄 Convert PDF to JPG</h2>
+  <input type="file" id="pdfFile" accept="application/pdf" />
+  <div id="images"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <script>
+    document.getElementById("pdfFile").addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      const imagesDiv = document.getElementById("images");
+      imagesDiv.innerHTML = "";
+
+      if (file && file.type === "application/pdf") {
+        const reader = new FileReader();
+        reader.onload = function () {
+          const typedarray = new Uint8Array(this.result);
+          pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+            for (let i = 1; i <= pdf.numPages; i++) {
+              pdf.getPage(i).then(page => {
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
+                const viewport = page.getViewport({ scale: 2 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+                  const imgURL = canvas.toDataURL("image/jpeg");
+
+                  const container = document.createElement("div");
+                  container.className = "image-container";
+
+                  const img = document.createElement("img");
+                  img.src = imgURL;
+
+                  const link = document.createElement("a");
+                  link.href = imgURL;
+                  link.download = `page-${i}.jpg`;
+                  link.className = "download-btn";
+                  link.innerText = `⬇️ Download Page ${i}`;
+
+                  container.appendChild(img);
+                  container.appendChild(link);
+                  imagesDiv.appendChild(container);
+                });
+              });
+            }
+          });
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        alert("Please upload a valid PDF file.");
+      }
+    });
+  </script>
+  <script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>

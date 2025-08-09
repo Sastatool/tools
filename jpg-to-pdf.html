@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JPG to PDF Converter - SastaTools</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #preview img {
+      max-width: 90%;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 480px) {
+      h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <h2>🖼️ Convert JPG/PNG to PDF</h2>
+  <input type="file" id="imageInput" accept="image/*" multiple />
+  <div id="preview"></div>
+  <button onclick="generatePDF()">Download PDF</button>
+
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const preview = document.getElementById("preview");
+    let images = [];
+
+    document.getElementById("imageInput").addEventListener("change", function(e) {
+      images = [];
+      preview.innerHTML = "";
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            const img = new Image();
+            img.src = evt.target.result;
+            preview.appendChild(img);
+            images.push(evt.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    });
+
+    async function generatePDF() {
+      if (images.length === 0) return alert("Please upload at least one image.");
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+
+      for (let i = 0; i < images.length; i++) {
+        const img = new Image();
+        img.src = images[i];
+        await new Promise(resolve => {
+          img.onload = () => {
+            const ratio = img.width / img.height;
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            let width = pageWidth;
+            let height = pageWidth / ratio;
+
+            if (height > pageHeight) {
+              height = pageHeight;
+              width = pageHeight * ratio;
+            }
+
+            const x = (pageWidth - width) / 2;
+            const y = (pageHeight - height) / 2;
+
+            pdf.addImage(images[i], "JPEG", x, y, width, height);
+            if (i < images.length - 1) pdf.addPage();
+            resolve();
+          };
+        });
+      }
+
+      pdf.save("converted.pdf");
+    }
+  </script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>

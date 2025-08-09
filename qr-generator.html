@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Code Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    img {
+      margin-top: 20px;
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔲 QR Code Generator</h1>
+  <input type="text" id="urlInput" placeholder="Enter URL (e.g. https://example.com)" />
+  <br />
+  <button onclick="generateQRCode()">Generate QR Code</button>
+  <br />
+  <div id="qrContainer" style="display:none;">
+    <img id="qrImage" alt="QR Code" />
+    <br />
+    <a id="downloadLink" download="qr-code.png">
+      <button>⬇️ Download QR</button>
+    </a>
+  </div>
+
+  <script>
+    function generateQRCode() {
+      const url = document.getElementById('urlInput').value.trim();
+      if (!url) {
+        alert('Please enter a valid URL');
+        return;
+      }
+
+      const apiURL = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=200x200`;
+
+      const qrImage = document.getElementById('qrImage');
+      const downloadLink = document.getElementById('downloadLink');
+
+      qrImage.src = apiURL;
+      downloadLink.href = apiURL;
+
+      document.getElementById('qrContainer').style.display = 'block';
+    }
+  </script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>

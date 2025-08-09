@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Thumbnail Downloader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #ff0000;
+    }
+
+    input {
+      width: 90%;
+      max-width: 500px;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #ff0000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #cc0000;
+    }
+
+    img {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+    #downloadBtn {
+      display: none;
+      margin-top: 15px;
+      background-color: #28a745;
+    }
+
+    #downloadBtn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h1>📸 YouTube Thumbnail Downloader</h1>
+  <input type="text" id="ytUrl" placeholder="Paste YouTube video link here" />
+  <br />
+  <button onclick="getThumbnail()">Get Thumbnail</button>
+
+  <div id="thumbnailSection">
+    <img id="thumbnailImg" alt="" style="display:none;" />
+    <br />
+    <button id="downloadBtn" onclick="downloadThumbnail()">⬇️ Download Thumbnail</button>
+  </div>
+
+  <script>
+    let currentThumbnailUrl = "";
+
+    function getVideoId(url) {
+      const regExp = /(?:youtube\.com\/.*v=|youtu\.be\/)([^&\n?#]+)/;
+      const match = url.match(regExp);
+      return match ? match[1] : null;
+    }
+
+    function getThumbnail() {
+      const url = document.getElementById("ytUrl").value.trim();
+      const videoId = getVideoId(url);
+
+      if (!videoId) {
+        alert("Please enter a valid YouTube video URL.");
+        return;
+      }
+
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+      const img = document.getElementById("thumbnailImg");
+      img.src = thumbnailUrl;
+      img.style.display = "block";
+
+      document.getElementById("downloadBtn").style.display = "inline-block";
+      currentThumbnailUrl = thumbnailUrl;
+    }
+
+    function downloadThumbnail() {
+      fetch(currentThumbnailUrl)
+        .then(res => res.blob())
+        .then(blob => {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "youtube_thumbnail.jpg";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        })
+        .catch(err => alert("Failed to download thumbnail"));
+    }
+  </script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>

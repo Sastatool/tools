@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" type="image/png" href="logo.png"><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>YouTube to MP3 Converter</title>
+<style>
+  body { font-family: Arial, sans-serif; background:#f4f4f4; text-align:center; padding:30px }
+  select, input, button { width:90%; max-width:400px; padding:12px; margin:10px auto; font-size:1rem; border-radius:6px; border:1px solid #ccc; display:block; }
+  button { background:#d32f2f; color:white; border:none; cursor:pointer; transition:0.3s; }
+  button:hover { background:#b71c1c; }
+</style>
+</head>
+<body>
+  <h1>🎵 YouTube to MP3 Converter</h1>
+  <input type="text" id="ytUrl" placeholder="Paste YouTube URL here" />
+  <select id="siteSelect">
+    <option value="ytmp3">YTMP3</option>
+    <option value="onlymp3">OnlyMP3</option>
+    <option value="y2mate">Y2Mate</option>
+    <option value="ezmp3">EzMP3</option>
+    <option value="cnvmp3">CnvMP3</option>
+  </select>
+  <button onclick="redirect()">Go to Converter</button>
+
+<script>
+  const sites = {
+    ytmp3: 'https://ytmp3.cc/en?url=',
+    onlymp3: 'https://onlymp3.to/?url=',
+    y2mate: 'https://www.y2mate.com/youtube-to-mp3?url=',
+    ezmp3: 'https://ezmp3.cc/?url=',
+    cnvmp3: 'https://cnvmp3.com/?url='
+  };
+
+  function redirect() {
+    const url = document.getElementById("ytUrl").value.trim();
+    if (!url.includes("youtube.com") && !url.includes("youtu.be")) {
+      return alert("Enter a valid YouTube URL.");
+    }
+    const site = document.getElementById("siteSelect").value;
+    window.open(sites[site] + encodeURIComponent(url), '_blank');
+  }
+</script><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key == 'U')) {
+    return false;
+  }
+};
+</script>
+</body>
+</html>
